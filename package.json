@@ -1,0 +1,23 @@
+{
+  "name": "webglstudio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eastnate/WebGLstudio.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eastnate/WebGLstudio/issues"
+  },
+  "homepage": "https://github.com/eastnate/WebGLstudio#readme",
+  "dependencies": {
+    "live-server": "^1.2.1",
+    "three": "^0.101.1"
+  }
+}
