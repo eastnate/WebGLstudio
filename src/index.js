@@ -34,8 +34,8 @@ let init = function() {
 
 
 let mainLoop = function() {
-   // cube.position.x += ADD;    
-   // cube.rotation.z -= ADD;
+   cube.position.x += ADD;    
+   cube.rotation.z -= ADD;
    
    if(cube.position.x <= -3 || cube.position.x >= 3)
       ADD *= -1;

@@ -1,10 +1,10 @@
 const path = require('path')
 
 module.exports ={
-    // entry: './src/index.js',
+    // entry: './src/app.js',
     // output: {
-    //   path: path.join(__dirname, 'dist'),
-    //   filename: 'main.js'
+    //   path: path.join(__dirname, 'public'),
+    //   filename: 'bundle.js'
     // },
     module: {
         rules: [
@@ -20,6 +20,6 @@ module.exports ={
     },
     devtool: 'cheap-module-eval-source-map',
     devServer: {
-        contentBase: __dirname
+        contentBase: path.join(__dirname, 'dist')
     }
 }
