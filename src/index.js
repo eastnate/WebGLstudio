@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
 import * as OrbitControls from 'three-orbitcontrols';
-
+import OBJLoader from 'three-obj-loader';
 
 let scene, camera, renderer, cube, controls;
 let ADD = 0.01;
@@ -49,9 +49,32 @@ let init = function () {
     // renderer.render(scene, camera);
     
     const gui = new dat.GUI();
-    gui.add(params, 'importObj');
-    gui.add(params, 'setMtl');
-    gui.add(params, 'exportObj');
+    gui.add(params, 'importObj')
+    gui.add(params, 'setMtl')
+    gui.add(params, 'exportObj')
+
+    OBJLoader(THREE);
+    const loader = new THREE.OBJLoader()
+    console.log(loader.load)
+    loader.load(
+        // resource URL
+        'resource/test.obj',
+        // called when resource is loaded
+        function ( object ) {
+            scene.add( object )
+        },
+        // called when loading is in progresses
+        function ( xhr ) {
+            console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )    
+        },
+        // called when loading has errors
+        function ( error ) {
+            console.log( 'An error happened' );
+    
+        }
+    );
+  
+    
 };
 
 
