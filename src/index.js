@@ -76,13 +76,19 @@ const init = function () {
 
     createCube();
 
-    var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
+    var geometry = new THREE.SphereGeometry(500, 60, 40);
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(- 1, 1, 1);
     var material = new THREE.MeshBasicMaterial({
         map: new THREE.TextureLoader().load('resource/background/test.jpg')
     });
-    let mesh = new THREE.Mesh(geometry, material);
+    // let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial( {
+    //     color: 0x156289,
+    //     emissive: 0x072534,
+    //     side: THREE.DoubleSide,
+    //     flatShading: true
+    // } ))
+    let mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh);
 
     // create the renderer   
