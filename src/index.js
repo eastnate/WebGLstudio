@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
 import * as OrbitControls from 'three-orbitcontrols'
-import {MTLLoader, OBJLoader} from 'three-obj-mtl-loader'
+import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
 
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
@@ -32,17 +32,17 @@ const BtnParams = {
         mtlLoader.load('resource/j_test.mtl', function (materials) {
 
             materials.preload();
-        
+
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials(materials);
             // objLoader.setPath('/examples/3d-obj-loader/assets/');
             objLoader.load('resource/j_test.obj', function (object) {
-        
+
                 scene.add(object);
                 object.position.y -= 60;
-        
+
             });
-        
+
         });
         // loader.load(
         //     'resource/j_test.obj',
@@ -76,6 +76,15 @@ const init = function () {
 
     createCube();
 
+    var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
+    // invert the geometry on the x-axis so that all of the faces point inward
+    geometry.scale(- 1, 1, 1);
+    var material = new THREE.MeshBasicMaterial({
+        map: new THREE.TextureLoader().load('resource/background/test.jpg')
+    });
+    let mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
     // create the renderer   
     renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -91,7 +100,6 @@ const init = function () {
     gui.add(BtnParams, 'setMtl')
     gui.add(BtnParams, 'exportObj')
 
-
 }
 
 
@@ -101,10 +109,43 @@ const mainLoop = function () {
 
     if (cube.position.x <= -3 || cube.position.x >= 3)
         ADD *= -1;
-
+    
+    
     renderer.render(scene, camera);
     requestAnimationFrame(mainLoop);
 }
 
 init()
 mainLoop()
+
+
+
+// ----------------------------------------
+// const scene = new THREE.Scene()
+// const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
+// const renderer = new THREE.WebGLRenderer();
+// const controls = new OrbitControls(camera, renderer.domElement);
+
+// init();
+// animate();
+// function init() {
+
+//     var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
+//     // invert the geometry on the x-axis so that all of the faces point inward
+//     geometry.scale(- 1, 1, 1);
+//     var material = new THREE.MeshBasicMaterial({
+//         map: new THREE.TextureLoader().load('resource/background/test.jpg')
+//     });
+//     let mesh = new THREE.Mesh(geometry, material);
+//     scene.add(mesh);
+//     renderer.setPixelRatio(window.devicePixelRatio);
+//     renderer.setSize(window.innerWidth, window.innerHeight);
+
+//     document.body.appendChild(renderer.domElement);
+  
+// }
+
+// function animate() {
+//     requestAnimationFrame(animate)
+//     renderer.render(scene, camera)
+// }
