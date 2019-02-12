@@ -1,0 +1,338 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 12.02.2019 11:59:19
+
+newmtl q7_alu
+	Ns 30.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.2608 0.2608 0.2608
+	Ks 0.3925 0.3925 0.3925
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__1_Raytrace.tga
+
+newmtl q7_tire
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0836 0.0836 0.0836
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_bump C:\Users\sub2\Desktop\Audi Q7\Audi Q7\tire.jpg
+	bump C:\Users\sub2\Desktop\Audi Q7\Audi Q7\tire.jpg
+
+newmtl q7_chrome
+	Ns 70.4896
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.1863 0.1863 0.1863
+	Ks 0.8000 0.8000 0.8000
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__2_Raytrace.tga
+
+newmtl q7_discs
+	Ns 91.0863
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.4353 0.4353 0.4353
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl q7_shields
+	Ns 83.1176
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0812 0.0812 0.0812
+	Ks 0.2600 0.2600 0.2600
+	Ke 0.0000 0.0000 0.0000
+
+newmtl q7_tip
+	Ns 49.3242
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3137 0.3137 0.3137
+	Kd 0.3137 0.3137 0.3137
+	Ks 0.4475 0.4475 0.4475
+	Ke 0.0000 0.0000 0.0000
+	map_bump C:\Users\sub2\Desktop\Audi Q7\Audi Q7\logo.jpg
+	bump C:\Users\sub2\Desktop\Audi Q7\Audi Q7\logo.jpg
+	map_refl Map__3_Raytrace.tga
+
+newmtl q7_inside
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.7843 0.7725 0.6549
+	Ks 0.0320 0.0320 0.0320
+	Ke 0.0000 0.0000 0.0000
+
+newmtl q7_fl_lens
+	Ns 49.3242
+	Ni 1.5000
+	d 0.0400
+	Tr 0.9600
+	Tf 0.0400 0.0400 0.0400 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.7843 0.7843 0.7843
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl q7_fl_mirror
+	Ns 55.0519
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.3445 0.3445 0.3445
+	Ks 0.4450 0.4450 0.4450
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__8_Raytrace.tga
+
+newmtl q7_fl_bulb
+	Ns 49.3242
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 1.0000 0.8980 0.6902
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.1721 0.1545 0.1188
+
+newmtl q7_fl_frame
+	Ns 77.2476
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.2888 0.2888 0.2888
+	Ks 0.1625 0.1625 0.1625
+	Ke 0.0000 0.0000 0.0000
+
+newmtl q7_fl_glass
+	Ns 57.6305
+	Ni 1.5000
+	d 0.1000
+	Tr 0.9000
+	Tf 0.1000 0.1000 0.1000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.3922 0.3922 0.3922
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__10_Raytrace.tga
+
+newmtl q7_fl_orange
+	Ns 49.3242
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.6315 0.2832 0.0781
+	Ks 0.2900 0.2900 0.2900
+	Ke 0.0167 0.0075 0.0021
+
+newmtl q7_black
+	Ns 0.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl q7_body
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0812 0.1228 0.1386
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__4_Raytrace.tga
+
+newmtl q7_front_light
+	Ns 49.3242
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5922 0.5922 0.5922
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\sub2\Desktop\Audi Q7\Audi Q7\light.jpg
+	map_Kd C:\Users\sub2\Desktop\Audi Q7\Audi Q7\light.jpg
+
+newmtl q7_glass_black
+	Ns 40.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0824 0.0824 0.0824
+	Ks 0.2720 0.2720 0.2720
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__6_Raytrace.tga
+
+newmtl q7_mirror
+	Ns 49.3242
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__9_Raytrace.tga
+
+newmtl q7_plate
+	Ns 74.4699
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.7843 0.7843 0.7843
+	Ks 0.2325 0.2325 0.2325
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\sub2\Desktop\Audi Q7\Audi Q7\tablica.jpg
+	map_Kd C:\Users\sub2\Desktop\Audi Q7\Audi Q7\tablica.jpg
+
+newmtl q7_red
+	Ns 49.3242
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.6431 0.0804 0.0064
+	Ks 0.4500 0.4500 0.4500
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\sub2\Desktop\Audi Q7\Audi Q7\red.jpg
+	map_Kd C:\Users\sub2\Desktop\Audi Q7\Audi Q7\red.jpg
+
+newmtl q7_body2
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.1495 0.1688 0.1640
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__7_Raytrace.tga
+
+newmtl q7_red1
+	Ns 49.3242
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.7843 0.0471 0.0314
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\sub2\Desktop\Audi Q7\Audi Q7\q7-red1.jpg
+	map_Kd C:\Users\sub2\Desktop\Audi Q7\Audi Q7\q7-red1.jpg
+
+newmtl q7_3stop
+	Ns 49.3242
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.7333 0.0037 0.0037
+	Ks 0.2850 0.2850 0.2850
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\sub2\Desktop\Audi Q7\Audi Q7\backlght.jpg
+	map_Kd C:\Users\sub2\Desktop\Audi Q7\Audi Q7\backlght.jpg
+
+newmtl q7_glass
+	Ns 40.0000
+	Ni 1.5000
+	d 0.4900
+	Tr 0.5100
+	Tf 0.4900 0.4900 0.4900 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.1812 0.1812 0.1812
+	Ks 0.8000 0.8000 0.8000
+	Ke 0.0000 0.0000 0.0000
+	map_refl Map__5_Raytrace.tga
+
+newmtl q7_sunroof
+	Ns 62.5802
+	Ni 1.5000
+	d 0.5350
+	Tr 0.4650
+	Tf 0.5350 0.5350 0.5350 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.1456 0.1456 0.1456
+	Ks 0.5000 0.5000 0.5000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl q7_sunroof_frame
+	Ns 62.5802
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0824 0.0824 0.0824
+	Ks 0.1700 0.1700 0.1700
+	Ke 0.0000 0.0000 0.0000
