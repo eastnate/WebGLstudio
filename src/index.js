@@ -11,6 +11,7 @@ const loader = new THREE.OBJLoader()
 
 
 let cube
+let car = null
 let ADD = 0.01
 let color = new THREE.Color(0xFF0000)
 
@@ -27,6 +28,7 @@ var mtlLoader = new THREE.MTLLoader();
 // mtlLoader.setPath('/examples/3d-obj-loader/assets/');
 
 
+
 const BtnParams = {
     importObj() {
         mtlLoader.load('resource/audi_obj.mtl', function (materials) {
@@ -37,56 +39,46 @@ const BtnParams = {
             objLoader.setMaterials(materials);
             // objLoader.setPath('/examples/3d-obj-loader/assets/');
             objLoader.load('resource/audi_obj.obj', function (object) {
-
-                scene.add(object);
-                object.position.y = -100;
+                car = object
+                scene.add(car);
+                car.position.y = -100;
             });
 
         });
     },
     exportObj() {},
     setY: 2
-
-    
 }
+
 
 const init = function () {
 
     scene.background = new THREE.Color(0xffffee);
-
-    camera.position.z = 5;
+    camera.position.z = 5
 
     createCube();
 
-    var geometry = new THREE.SphereGeometry(200, 60, 40);
-    // invert the geometry on the x-axis so that all of the faces point inward
-    geometry.scale( -1, 1, 1);
+    // Background: invert the geometry on the x-axis so that all of the faces point inward
+    var geometry = new THREE.SphereGeometry(200, 60, 40)
+    geometry.scale( -1, 1, 1)
     var material = new THREE.MeshBasicMaterial({
         map: new THREE.TextureLoader().load('resource/background/test.jpg')
     });
-    // let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial( {
-    //     color: 0x156289,
-    //     emissive: 0x072534,
-    //     side: THREE.DoubleSide,
-    //     flatShading: true
-    // } ))
     let mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh);
 
     // create the renderer   
     renderer.setSize(window.innerWidth, window.innerHeight);
-
     document.body.appendChild(renderer.domElement);
 
-    // light
+    // Light
     var light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
     scene.add( light );
     renderer.render(scene, camera);
 
+    // GUI
     const panel = new dat.GUI();
-
     const folder1 = panel.addFolder( 'Basic')
-
     const folder2 = panel.addFolder( 'Object/Camera Controls')
     const folder3 = panel.addFolder( 'Scene Details' );
     const folder4 = panel.addFolder( 'VisualFX' );
@@ -104,6 +96,9 @@ const mainLoop = function () {
     cube.position.x += ADD;
     cube.rotation.z -= ADD;
     cube.position.y = BtnParams.setY
+    if (!!car) {
+        car.position.y = BtnParams.setY
+    }
     if (cube.position.x <= -3 || cube.position.x >= 3)
         ADD *= -1;
     
@@ -114,35 +109,3 @@ const mainLoop = function () {
 
 init()
 mainLoop()
-
-
-
-// ----------------------------------------
-// const scene = new THREE.Scene()
-// const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
-// const renderer = new THREE.WebGLRenderer();
-// const controls = new OrbitControls(camera, renderer.domElement);
-
-// init();
-// animate();
-// function init() {
-
-//     var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
-//     // invert the geometry on the x-axis so that all of the faces point inward
-//     geometry.scale(- 1, 1, 1);
-//     var material = new THREE.MeshBasicMaterial({
-//         map: new THREE.TextureLoader().load('resource/background/test.jpg')
-//     });
-//     let mesh = new THREE.Mesh(geometry, material);
-//     scene.add(mesh);
-//     renderer.setPixelRatio(window.devicePixelRatio);
-//     renderer.setSize(window.innerWidth, window.innerHeight);
-
-//     document.body.appendChild(renderer.domElement);
-  
-// }
-
-// function animate() {
-//     requestAnimationFrame(animate)
-//     renderer.render(scene, camera)
-// }
