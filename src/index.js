@@ -11,383 +11,194 @@ import * as PMREMGenerator from 'three/examples/js/pmrem/PMREMGenerator.js'
 import * as PMREMCubeUVPacker from 'three/examples/js/pmrem/PMREMCubeUVPacker.js'
 
 
+const mtlLoader = new THREE.MTLLoader();
 
-// var hdrCubeRenderTarget;
-// var hdrCubeMap;
+var renderer, scene, camera;
 
-// console.log('Original')
-// const scene = new THREE.Scene()
-// const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
-// const renderer = new THREE.WebGLRenderer()
-// const loader = new THREE.OBJLoader()
-// const controls = new OrbitControls(camera, renderer.domElement)
+var spotLight, lightHelper, shadowCameraHelper;
 
-// let torusMesh = null
-// let car = null
-// let ADD = 0.01
-// let color = new THREE.Color(0xFFf000)
-
-// const hdrUrls = ['px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr'];
-
-// // -------------------------------------------------------------------------
-// hdrCubeMap = new THREE.HDRCubeTextureLoader()
-//     .setPath('./resource/textures/HDR/')
-//     .load(THREE.UnsignedByteType, hdrUrls, function () {
-
-//         var pmremGenerator = new THREE.PMREMGenerator(hdrCubeMap);
-//         pmremGenerator.update(renderer);
-
-//         var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
-//         pmremCubeUVPacker.update(renderer);
-
-//         hdrCubeRenderTarget = pmremCubeUVPacker.CubeUVRenderTarget;
-
-//     });
-// // -------------------------------------------------------------------------
-
-
-// const Params = {
-//     importObj() {
-//         mtlLoader.load('/audi_obj.mtl', function (materials) {
-
-//             materials.preload();
-
-//             const objLoader = new THREE.OBJLoader();
-//             objLoader.setMaterials(materials);
-//             // objLoader.setPath('/examples/3d-obj-loader/assets/');
-//             objLoader.load('resource/audi_obj.obj', function (object) {
-//                 car = object
-                
-
-//                 scene.add(car)
-//                 car.position.y = -100
-//             })
-//         })
-//     },
-//     exportObj() { },
-//     y: 2,
-//     x: 2,
-//     roughness: 0.0,
-//     metalness: 0.0,
-//     exposure: 1.0,
-// }
-
-
-// const createDonut = function () {
-//     var geometry = new THREE.TorusKnotBufferGeometry(18, 8, 150, 20);
-//     var material = new THREE.MeshStandardMaterial({
-//         color: 0xffffff,
-//         metalness: Params.metalness,
-//         roughness: Params.roughness
-//     });
-
-//     torusMesh = new THREE.Mesh(geometry, material);
-//     scene.add(torusMesh);
-// }
-
-
-
-
-
-// renderer.setPixelRatio(window.devicePixelRatio);
-// renderer.setSize(window.innerWidth, window.innerHeight);
-
-// // 미끄러움
-// renderer.toneMapping = THREE.ReinhardToneMapping;
-// // 어두워진거 밝아짐
-// renderer.gammaInput = true;
-// renderer.gammaOutput = true;
-
-// const mtlLoader = new THREE.MTLLoader();
-// mtlLoader.setTexturePath('/resource');
-// mtlLoader.setPath('/resource');
-
-
-
-// const init = function () {
-
-//     scene.background = new THREE.Color(0xffffee);
-//     camera.position.z = 5
-//     renderer.toneMapping = THREE.LinearToneMapping
-//     createDonut();
-
-//     const geometry = new THREE.PlaneBufferGeometry(200, 200);
-//     const material = new THREE.MeshBasicMaterial();
-//     const planeMesh = new THREE.Mesh(geometry, material);
-//     planeMesh.position.y = - 50;
-//     planeMesh.rotation.x = - Math.PI * 0.5;
-//     //scene.add(planeMesh);
-
-
-//     // create the renderer   
-//     renderer.setSize(window.innerWidth, window.innerHeight);
-//     document.body.appendChild(renderer.domElement);
-
-//     // // Light
-//     // const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-//     // scene.add(light);
-//     // renderer.render(scene, camera);
-
-//     // GUI
-//     const panel = new dat.GUI();
-//     const folder1 = panel.addFolder('Basic')
-//     const folder2 = panel.addFolder('Object/Camera Controls')
-//     const folder3 = panel.addFolder('IBL');
-
-//     folder1.add(Params, 'importObj'),
-//         folder1.add(Params, 'exportObj')
-//     folder1.open()
-//     folder2.add(Params, 'y', -50, 5)
-//     folder2.add(Params, 'x', -50, 5)
-//     folder2.open()
-//     folder3.add(Params, 'roughness',0, 1)
-//     folder3.add(Params, 'metalness',0, 1)
-//     folder3.add(Params, 'exposure',0, 3)
-//     folder3.open()
-// }
-
-
-// const animate = function () {
-
-
-//     requestAnimationFrame(animate);
-
-//     if (!!car) {
-//         car.position.y = Params.y
-//         car.position.x = Params.x
-//     }
-//     if (torusMesh.position.x <= -3 || torusMesh.position.x >= 3)
-//         ADD *= -1;
-
-//     torusMesh.material.roughness = Params.roughness;
-//     torusMesh.material.metalness = Params.metalness;
-
-    
-//     if (hdrCubeRenderTarget) {
-//         // Here!
-//         torusMesh.material.envMap = hdrCubeRenderTarget.texture;
-
-//         torusMesh.material.needsUpdate = true;
-//         torusMesh.rotation.y += 0.005;
-//         scene.background = hdrCubeMap;
-//         renderer.toneMappingExposure = Params.exposure;
-//         renderer.render(scene, camera);
-//     }
-// }
-
-
-// init()
-// animate()
-
-
-var params = {
-    envMap: 'EXR',
-    roughness: 0.0,
-    metalness: 0.0,
-    exposure: 1.0,
-    debug: false,
-};
-
-var container
-var camera, scene, renderer, controls;
-var torusMesh, planeMesh;
-var standardMaterial, floorMaterial;
-var pngCubeRenderTarget, exrCubeRenderTarget;
-var pngBackground, exrBackground;
-
-init();
-animate();
+var gui;
 
 function init() {
 
-    container = document.createElement( 'div' );
-    document.body.appendChild( container );
-
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-    camera.position.set( 0, 0, 120 );
-
-    scene = new THREE.Scene();
-
     renderer = new THREE.WebGLRenderer();
-    renderer.toneMapping = THREE.LinearToneMapping;
-     // // Light
-    const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-    scene.add(light);
-    renderer.render(scene, camera);
-
-    
-
-    var geometry = new THREE.TorusKnotBufferGeometry( 18, 8, 150, 20 );
-    var material = new THREE.MeshStandardMaterial( {
-        metalness: params.roughness,
-        roughness: params.metalness,
-        envMapIntensity: 1.0,
-        color: 0x00a1cb,
-    } );
-
-    torusMesh = new THREE.Mesh( geometry, material );
-    scene.add( torusMesh );
-
-    var geometry = new THREE.PlaneBufferGeometry( 200, 200 );
-    var material = new THREE.MeshBasicMaterial();
-
-    // for debug
-    planeMesh = new THREE.Mesh( geometry, material );
-    planeMesh.position.y = - 50;
-    planeMesh.rotation.x = - Math.PI * 0.5;
-    scene.add( planeMesh );
-    
-
-    //
-    new THREE.RGBELoader().load( './resource/textures/HDR/Etnies_Park_Center_3k.hdr', function ( texture, textureData) {
-        texture
-        texture.encoding = THREE.RGBEEncoding;
-        texture.minFilter = THREE.NearestFilter;
-        texture.magFilter = THREE.NearestFilter;
-        texture.flipY = true;
-        console.log(textureData.width)
-        console.log(textureData.height)
-        textureData.width = 2000
-        console.log(textureData.width)
-        var cubemapGenerator = new THREE.EquirectangularToCubeGenerator( texture, { resolution: 3200, type: THREE.UnsignedByteType } );
-        exrBackground = cubemapGenerator.renderTarget;
-        var cubeMapTexture = cubemapGenerator.update( renderer );
-
-        var pmremGenerator = new THREE.PMREMGenerator( cubeMapTexture );
-        pmremGenerator.update( renderer );
-
-        var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker( pmremGenerator.cubeLods );
-        pmremCubeUVPacker.update( renderer );
-
-        exrCubeRenderTarget = pmremCubeUVPacker.CubeUVRenderTarget;
-
-        texture.dispose();
-        pmremGenerator.dispose();
-        pmremCubeUVPacker.dispose();
-        
-        // for object MTL import
-const mtlLoader = new THREE.MTLLoader();
-mtlLoader.setTexturePath('/resource');
-mtlLoader.setPath('/resource');
-
-mtlLoader.load('/room_obj.mtl', function (materials) {
-
-    materials.preload();
-
-    const objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(materials);
-    objLoader.setPath('/resource');
-    objLoader.load('/room_obj.obj', function (object) {
-        // let car = object
-        // scene.add(car)
-        // car.position.y = -100
-
-
-        object.traverse( function ( child ) {
-
-          if ( child instanceof THREE.Mesh ) {
-             child.material.envMap = cubeMapTexture;
-             console.log(child.material.envMap)
-
-          }
-
-      } );
-
-      object.position.y = -100
-      scene.add( object );
-    })     
-})
-
-
-    } );
-
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
-
-
-    container.appendChild( renderer.domElement );
+    document.body.appendChild( renderer.domElement );
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
 
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 1000 );
+    camera.position.set( 65, 8, - 10 );
+
+    var controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls.addEventListener( 'change', render );
+
+    controls.enablePan = false;
+
+    var ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
+    scene.add( ambient );
+
+    spotLight = new THREE.SpotLight( 0xffffff, 1 );
+    spotLight.position.set( 15, 40, 35 );
+    spotLight.angle = Math.PI / 4;
+    spotLight.penumbra = 0.05;
+    spotLight.decay = 2;
+    spotLight.distance = 200;
+
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
+    spotLight.shadow.camera.near = 10;
+    spotLight.shadow.camera.far = 200;
+    scene.add( spotLight );
+
+    lightHelper = new THREE.SpotLightHelper( spotLight );
+    scene.add( lightHelper );
+
+    shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
+    scene.add( shadowCameraHelper );
+
+    scene.add( new THREE.AxesHelper( 10 ) );
+
+    var material = new THREE.MeshPhongMaterial( { color: 0x808080, dithering: true } );
+
+    var geometry = new THREE.PlaneBufferGeometry( 2000, 2000 );
+
+    var mesh = new THREE.Mesh( geometry, material );
+    mesh.position.set( 0, - 1, 0 );
+    mesh.rotation.x = - Math.PI * 0.5;
+    mesh.receiveShadow = true;
+    scene.add( mesh );
+
+    var material = new THREE.MeshPhongMaterial( { color: 0x4080ff, dithering: true } );
+
+    var geometry = new THREE.BoxBufferGeometry( 3, 1, 2 );
+
+    var mesh = new THREE.Mesh( geometry, material );
+    mesh.position.set( 40, 2, 0 );
+    mesh.castShadow = true;
+    scene.add( mesh );
+
+    mtlLoader.load('resource/room_obj.mtl', function (materials) {
+
+        // materials.preload();
+
+        const objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials(materials);
+        // objLoader.setPath('/examples/3d-obj-loader/assets/');
+        objLoader.load('resource/room_obj.obj', function (object) {
+            object.traverse( function ( child ) {
+
+                if ( child instanceof THREE.Mesh ) {
+            
+                    //child.material.map = texture;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+            
+                }
+            
+            } );
+            scene.add(object)
+
+        })
+    })
+    
 
 
-    controls = new THREE.OrbitControls( camera, renderer.domElement );
-    //controls.minDistance = 50;
-    //controls.maxDistance = 300;
+    controls.target.copy( mesh.position );
+    controls.update();
 
-    window.addEventListener( 'resize', onWindowResize, false );
-
-    var gui = new dat.GUI();
-
-    gui.add( params, 'envMap', [ 'EXR', 'PNG' ] );
-    gui.add( params, 'roughness', 0, 1, 0.01 );
-    gui.add( params, 'metalness', 0, 1, 0.01 );
-    gui.add( params, 'exposure', 0, 2, 0.01 );
-    gui.add( params, 'debug', false );
-    gui.open();
+    window.addEventListener( 'resize', onResize, false );
 
 }
 
-function onWindowResize() {
+function onResize() {
 
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-
-    camera.aspect = width / height;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
-    renderer.setSize( width, height );
-
-}
-
-function animate() {
-
-    requestAnimationFrame( animate );
-
-
-    render();
-
+    renderer.setSize( window.innerWidth, window.innerHeight );
 
 }
 
 function render() {
 
-    torusMesh.material.roughness = params.roughness;
-    torusMesh.material.metalness = params.metalness;
+    lightHelper.update();
 
-    var newEnvMap = torusMesh.material.envMap;
-    var background = scene.background;
-
-    switch ( params.envMap ) {
-
-        case 'EXR':
-            newEnvMap = exrCubeRenderTarget ? exrCubeRenderTarget.texture : null;
-            background = exrBackground;
-            break;
-        case 'PNG':
-            newEnvMap = pngCubeRenderTarget ? pngCubeRenderTarget.texture : null;
-            background = pngBackground;
-            break;
-
-    }
-
-    if ( newEnvMap !== torusMesh.material.envMap ) {
-
-        torusMesh.material.envMap = newEnvMap;
-        torusMesh.material.needsUpdate = true;
-
-        planeMesh.material.map = newEnvMap;
-        planeMesh.material.needsUpdate = true;
-
-    }
-
-    torusMesh.rotation.y += 0.005;
-    planeMesh.visible = params.debug;
-
-    scene.background = background;
-    renderer.toneMappingExposure = params.exposure;
+    shadowCameraHelper.update();
 
     renderer.render( scene, camera );
 
 }
+
+function buildGui() {
+
+    gui = new dat.GUI();
+
+    var params = {
+        'light color': spotLight.color.getHex(),
+        intensity: spotLight.intensity,
+        distance: spotLight.distance,
+        angle: spotLight.angle,
+        penumbra: spotLight.penumbra,
+        decay: spotLight.decay
+    };
+
+    gui.addColor( params, 'light color' ).onChange( function ( val ) {
+
+        spotLight.color.setHex( val );
+        render();
+
+    } );
+
+    gui.add( params, 'intensity', 0, 2 ).onChange( function ( val ) {
+
+        spotLight.intensity = val;
+        render();
+
+    } );
+
+
+    gui.add( params, 'distance', 50, 200 ).onChange( function ( val ) {
+
+        spotLight.distance = val;
+        render();
+
+    } );
+
+    gui.add( params, 'angle', 0, Math.PI / 3 ).onChange( function ( val ) {
+
+        spotLight.angle = val;
+        render();
+
+    } );
+
+    gui.add( params, 'penumbra', 0, 1 ).onChange( function ( val ) {
+
+        spotLight.penumbra = val;
+        render();
+
+    } );
+
+    gui.add( params, 'decay', 1, 2 ).onChange( function ( val ) {
+
+        spotLight.decay = val;
+        render();
+
+    } );
+
+    gui.open();
+
+}
+
+init();
+
+buildGui();
+
+render();
