@@ -210,19 +210,14 @@ function init() {
 
     renderer = new THREE.WebGLRenderer();
     renderer.toneMapping = THREE.LinearToneMapping;
-     // // Light
-    const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-    scene.add(light);
-    renderer.render(scene, camera);
 
-    
+    //
 
     var geometry = new THREE.TorusKnotBufferGeometry( 18, 8, 150, 20 );
     var material = new THREE.MeshStandardMaterial( {
         metalness: params.roughness,
         roughness: params.metalness,
-        envMapIntensity: 1.0,
-        color: 0x00a1cb,
+        envMapIntensity: 1.0
     } );
 
     torusMesh = new THREE.Mesh( geometry, material );
@@ -238,7 +233,6 @@ function init() {
     scene.add( planeMesh );
     
 
-    //
     new THREE.RGBELoader().load( './resource/textures/HDR/Etnies_Park_Center_3k.hdr', function ( texture, textureData) {
         texture
         texture.encoding = THREE.RGBEEncoding;
@@ -264,42 +258,9 @@ function init() {
         texture.dispose();
         pmremGenerator.dispose();
         pmremCubeUVPacker.dispose();
-        
-        // for object MTL import
-const mtlLoader = new THREE.MTLLoader();
-mtlLoader.setTexturePath('/resource');
-mtlLoader.setPath('/resource');
-
-mtlLoader.load('/room_obj.mtl', function (materials) {
-
-    materials.preload();
-
-    const objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(materials);
-    objLoader.setPath('/resource');
-    objLoader.load('/room_obj.obj', function (object) {
-        // let car = object
-        // scene.add(car)
-        // car.position.y = -100
-
-
-        object.traverse( function ( child ) {
-
-          if ( child instanceof THREE.Mesh ) {
-             child.material.envMap = cubeMapTexture;
-             console.log(child.material.envMap)
-
-          }
-
-      } );
-
-      object.position.y = -100
-      scene.add( object );
-    })     
-})
-
 
     } );
+
 
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -309,6 +270,7 @@ mtlLoader.load('/room_obj.mtl', function (materials) {
 
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
+
 
 
 
