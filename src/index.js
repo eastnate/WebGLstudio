@@ -1,5 +1,7 @@
 import * as THREE from 'three';
+
 import * as dat from 'dat.gui';
+
 import * as OrbitControls from 'three-orbitcontrols'
 import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
 import *  as RGBELoader from 'three/examples/js/loaders/RGBELoader.js'
@@ -10,195 +12,229 @@ import EquirectangularToCubeGenerator from 'three/examples/js/loaders/Equirectan
 import * as PMREMGenerator from 'three/examples/js/pmrem/PMREMGenerator.js'
 import * as PMREMCubeUVPacker from 'three/examples/js/pmrem/PMREMCubeUVPacker.js'
 
+const scene = new THREE.Scene()
+let camera = new THREE.PerspectiveCamera(53, window.innerWidth / window.innerHeight, 1, 10000)
 
-const mtlLoader = new THREE.MTLLoader();
+const renderer = new THREE.WebGLRenderer()
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.LinearToneMapping;
 
-var renderer, scene, camera;
+const controls = new OrbitControls(camera, renderer.domElement)
+const objLoader = new OBJLoader();
+const mtlLoader = new MTLLoader();
+const objLoader2 = new OBJLoader();
+const mtlLoader2 = new MTLLoader();
 
-var spotLight, lightHelper, shadowCameraHelper;
+let angle1= 0;
+let angle2= 0;
+let bulbLight = null;
+let hemispherelight = null
+var pngCubeRenderTarget, exrCubeRenderTarget;
+var pngBackground, exrBackground;
+let cubeMapTexture = null
 
-var gui;
+let camera_params = {
+  camera_x: -500,
+  camera_y: 150,
+  camera_z: -200,
+};
 
-function init() {
+let dom_light = {
+  dom_intensity: 0.38
+};
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+let bubl_light = {
+  emissiveIntensity: 1.2,
+  decay: 1,
+};
 
-    renderer.gammaInput = true;
-    renderer.gammaOutput = true;
 
-    scene = new THREE.Scene();
+// let cube = null;
+// const createCube = function () {
+//     let geometry = new THREE.BoxGeometry(1200, 1, 1200);
+//     let material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+//     cube = new THREE.Mesh(geometry, material);
+//     cube.position.set(0,-100,0)
+//     cube.traverse(function(child) {
+//       if (child instanceof THREE.Mesh) {
+//         child.receiveShadow = true;
+//         child.castShadow = true;
+//       }
+//     });
+//     scene.add(cube);
+// }
 
-    camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 1000 );
-    camera.position.set( 65, 8, - 10 );
 
-    var controls = new THREE.OrbitControls( camera, renderer.domElement );
-    controls.addEventListener( 'change', render );
 
-    controls.enablePan = false;
+const init = function () {
 
-    var ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
-    scene.add( ambient );
+    // scene.background = new THREE.Color(0x000000);
+    camera.position.set(-500, 150, -200); // Set position like this
+    camera.lookAt(new THREE.Vector3(0,0,0)); // Set look at coordinate like this
 
-    spotLight = new THREE.SpotLight( 0xffffff, 1 );
-    spotLight.position.set( 15, 40, 35 );
-    spotLight.angle = Math.PI / 4;
-    spotLight.penumbra = 0.05;
-    spotLight.decay = 2;
-    spotLight.distance = 200;
 
-    spotLight.castShadow = true;
-    spotLight.shadow.mapSize.width = 1024;
-    spotLight.shadow.mapSize.height = 1024;
-    spotLight.shadow.camera.near = 10;
-    spotLight.shadow.camera.far = 200;
-    scene.add( spotLight );
 
-    lightHelper = new THREE.SpotLightHelper( spotLight );
-    scene.add( lightHelper );
+    
+    new THREE.RGBELoader().load('./resource/textures/HDR/Etnies_Park_Center_3k.hdr', function (texture, textureData) {
+        texture
+        texture.encoding = THREE.RGBEEncoding;
+        texture.minFilter = THREE.NearestFilter;
+        texture.magFilter = THREE.NearestFilter;
+        texture.flipY = true;
+        console.log(textureData.width)
+        console.log(textureData.height)
+        textureData.width = 2000
+        console.log(textureData.width)
+        var cubemapGenerator = new THREE.EquirectangularToCubeGenerator(texture, { resolution: 3200, type: THREE.UnsignedByteType });
+        exrBackground = cubemapGenerator.renderTarget;
+        cubeMapTexture = cubemapGenerator.update(renderer);
 
-    shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
-    scene.add( shadowCameraHelper );
+        var pmremGenerator = new THREE.PMREMGenerator(cubeMapTexture);
+        pmremGenerator.update(renderer);
 
-    scene.add( new THREE.AxesHelper( 10 ) );
+        var pmremCubeUVPacker = new THREE.PMREMCubeUVPacker(pmremGenerator.cubeLods);
+        pmremCubeUVPacker.update(renderer);
 
-    var material = new THREE.MeshPhongMaterial( { color: 0x808080, dithering: true } );
+        exrCubeRenderTarget = pmremCubeUVPacker.CubeUVRenderTarget;
 
-    var geometry = new THREE.PlaneBufferGeometry( 2000, 2000 );
+        texture.dispose();
+        pmremGenerator.dispose();
+        pmremCubeUVPacker.dispose();
 
-    var mesh = new THREE.Mesh( geometry, material );
-    mesh.position.set( 0, - 1, 0 );
-    mesh.rotation.x = - Math.PI * 0.5;
-    mesh.receiveShadow = true;
-    scene.add( mesh );
+        
 
-    var material = new THREE.MeshPhongMaterial( { color: 0x4080ff, dithering: true } );
+    });
 
-    var geometry = new THREE.BoxBufferGeometry( 3, 1, 2 );
 
-    var mesh = new THREE.Mesh( geometry, material );
-    mesh.position.set( 40, 2, 0 );
-    mesh.castShadow = true;
-    scene.add( mesh );
+   
 
-    mtlLoader.load('resource/room_obj.mtl', function (materials) {
+    // for object MTL import
+    const mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setTexturePath('/resource');
+    mtlLoader.setPath('/resource');
 
-        // materials.preload();
+    mtlLoader.load('/spo.mtl', function (materials) {
 
+        materials.preload();
         const objLoader = new THREE.OBJLoader();
         objLoader.setMaterials(materials);
-        // objLoader.setPath('/examples/3d-obj-loader/assets/');
-        objLoader.load('resource/room_obj.obj', function (object) {
-            object.traverse( function ( child ) {
+        objLoader.setPath('/resource');
+        objLoader.load('/spo.obj', function (object) {
 
-                if ( child instanceof THREE.Mesh ) {
-            
-                    //child.material.map = texture;
-                    child.castShadow = true;
+            object.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+
                     child.receiveShadow = true;
-            
+                    child.castShadow = true;
+                    //console.log(child.name);
+                  }
+                if (child.name === 'Object001') {
+                    console.log('This is Material:', child.material)
+                    child.material.envMap = cubeMapTexture;
+                    child.material.specular.setHex(0xff0000)
+                    child.material.envMapIntensity = 1
+                    child.material.reflectivity= 0.38
+                    child.material.shininess = 30;
+                    //child.material.color.setHex(0xfff000);
+                    child.material.needsUpdate = true;
                 }
-            
-            } );
-            scene.add(object)
 
+                if (child.name === 'OUT650') {
+                    //child.material.color.setHex(0x00008f);
+                }
+
+            });
+
+            object.position.y = -100
+            scene.add(object);
         })
     })
-    
+
+    hemispherelight = new THREE.HemisphereLight(0xdee2e8, 0x353021, 0.38);
+    scene.add(hemispherelight);
+
+    //b67e5b : sunrise
+    //c0bfad : at noon
+    //bdbec0 : mist and cloud
+    //0b46a5 :
+    //dee2e8 :
 
 
-    controls.target.copy( mesh.position );
-    controls.update();
 
-    window.addEventListener( 'resize', onResize, false );
-
-}
-
-function onResize() {
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize( window.innerWidth, window.innerHeight );
-
-}
-
-function render() {
-
-    lightHelper.update();
-
-    shadowCameraHelper.update();
-
-    renderer.render( scene, camera );
-
-}
-
-function buildGui() {
-
-    gui = new dat.GUI();
-
-    var params = {
-        'light color': spotLight.color.getHex(),
-        intensity: spotLight.intensity,
-        distance: spotLight.distance,
-        angle: spotLight.angle,
-        penumbra: spotLight.penumbra,
-        decay: spotLight.decay
-    };
-
-    gui.addColor( params, 'light color' ).onChange( function ( val ) {
-
-        spotLight.color.setHex( val );
-        render();
-
-    } );
-
-    gui.add( params, 'intensity', 0, 2 ).onChange( function ( val ) {
-
-        spotLight.intensity = val;
-        render();
-
-    } );
+    bulbLight = new THREE.SpotLight( 0xc0bfad, 1 , 1000, 10);
+      bulbLight.position.set( 0, 400, 0 );
+      bulbLight.decay = 1;
+      bulbLight.castShadow = true;
+      bulbLight.shadow.camera.far = 200;
+      scene.add( bulbLight );
 
 
-    gui.add( params, 'distance', 50, 200 ).onChange( function ( val ) {
 
-        spotLight.distance = val;
-        render();
+    var gui = new dat.GUI();
+    let camera_option = gui.addFolder('Camera');
+    camera_option.add( camera_params, 'camera_x', -1000, 1000, 1);
+    camera_option.add( camera_params, 'camera_y', 50, 700, 1);
+    camera_option.add( camera_params, 'camera_z', -600, 600, 1);
+    camera_option.open();
 
-    } );
+    var dom_option = gui.addFolder('Dom');
+    dom_option.add(dom_light, 'dom_intensity', 0, 1, 0.01);
+    dom_option.open();
 
-    gui.add( params, 'angle', 0, Math.PI / 3 ).onChange( function ( val ) {
-
-        spotLight.angle = val;
-        render();
-
-    } );
-
-    gui.add( params, 'penumbra', 0, 1 ).onChange( function ( val ) {
-
-        spotLight.penumbra = val;
-        render();
-
-    } );
-
-    gui.add( params, 'decay', 1, 2 ).onChange( function ( val ) {
-
-        spotLight.decay = val;
-        render();
-
-    } );
+    var bubl_light_option = gui.addFolder('Bubl_light');
+    bubl_light_option.add(bubl_light, 'emissiveIntensity', 0, 3, 0.1);
+    bubl_light_option.add(bubl_light, 'decay', 0, 4, 0.1);
+    bubl_light_option.open();
 
     gui.open();
 
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 }
 
-init();
 
-buildGui();
+const mainLoop = function () {
+  angle1-=0.005;
+  angle2+=0.003
+  scene.background = exrBackground;
 
-render();
+
+  bulbLight.position.x = 800*Math.sin(angle1);
+  bulbLight.position.z = 800*Math.cos(angle1);
+
+
+  camera.position.x = camera_params.camera_x
+  camera.position.y = camera_params.camera_y
+  camera.position.z = camera_params.camera_z
+  camera.lookAt(new THREE.Vector3(0,0,0));
+
+
+  hemispherelight.intensity = dom_light.dom_intensity
+
+
+  bulbLight.decay = bubl_light.decay;
+  bulbLight.emissiveIntensity = bubl_light.emissiveIntensity;
+
+
+
+  window.addEventListener( 'resize', onWindowResize, false );
+  renderer.render(scene, camera);
+  requestAnimationFrame(mainLoop);
+}
+
+function onWindowResize() {
+
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( width, height );
+
+}
+
+init()
+mainLoop()
