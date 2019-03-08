@@ -146,11 +146,18 @@ const init = function () {
 
             });
 
-            object.position.y = -100
+            // object.position.y = -100
             scene.add(object);
         })
     })
+    var material = new THREE.MeshPhongMaterial( { color: 0xffffee, dithering: true } );
+    var geometry = new THREE.BoxBufferGeometry( 1200, 1, 1200 );
 
+    var mesh = new THREE.Mesh( geometry, material );
+    mesh.position.set( 0, -100, 0 );
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    scene.add( mesh );
     hemispherelight = new THREE.HemisphereLight(0xdee2e8, 0x353021, 0.38);
     scene.add(hemispherelight);
 
@@ -220,6 +227,10 @@ const mainLoop = function () {
 
 
   window.addEventListener( 'resize', onWindowResize, false );
+
+  renderer.toneMappingExposure = 1.5;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.render(scene, camera);
   requestAnimationFrame(mainLoop);
 }
