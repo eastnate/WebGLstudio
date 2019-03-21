@@ -1,0 +1,6 @@
+{
+  "A":["bumper_001","floor_001","bumper2_001","bumper2_002","bumper2_003",
+    "trunk_001","trunk_002","trunk2_001","trunk2_002","trunk2_003"],
+  "B":["l_f_tire_002","l_r_tire_002","r_f_tire_002","r_r_tire_002"],
+  "C":["l_f_tire_001","l_r_tire_001","r_f_tire_001","r_r_tire_001"]
+}

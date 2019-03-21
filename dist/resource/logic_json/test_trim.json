@@ -1,0 +1,20 @@
+{
+  "trim1" : {
+    "bumper" : ["midnight_blue", "midnight_red"],
+    "floor" : ["midnight_blue", "midnight_red"],
+    "trunk" : ["midnight_blue", "midnight_red"],
+    "l_f_tire" : ["tire"],
+    "l_r_tire" : ["tire"],
+    "r_f_tire" : ["tire"],
+    "r_r_tire" : ["tire"]
+  },
+  "trim2" : {
+    "bumper2" : ["midnight_blue", "midnight_red"],
+    "floor" : ["midnight_blue", "midnight_red"],
+    "trunk2" : ["midnight_blue", "midnight_red"],
+    "l_f_tire" : ["tire"],
+    "l_r_tire" : ["tire"],
+    "r_f_tire" : ["tire"],
+    "r_r_tire" : ["tire"]
+  }
+}

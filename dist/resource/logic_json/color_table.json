@@ -1,0 +1,12 @@
+{
+  "test_car":{
+    "ext":{
+      "blue":["A_midnightblue","B_yellowtire","C_tireaxis"],
+      "red":["A_midnightred","B_greentire","C_tireaxis"]
+    },
+    "int":{
+      "brown":["anything"],
+      "gray":["anything"]
+    }
+  }
+}
