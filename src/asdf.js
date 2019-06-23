@@ -1,211 +1,3 @@
-// import * as THREE from 'three';
-// import * as dat from 'dat.gui';
-// import * as OrbitControls from 'three-orbitcontrols'
-// import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
-
-
-// import color_table from '../dist/resource/logic_json/color_table.json'
-// import test_trim from '../dist/resource/logic_json/test_trim.json'
-// import test_car from '../dist/resource/logic_json/test_car.json'
-
-
-// const SUNu = 0.148000
-// const SUNv = 0.260000
-
-
-// const scene = new THREE.Scene()
-// let camera = new THREE.PerspectiveCamera(53, window.innerWidth / window.innerHeight, 1, 10000)
-
-// const renderer = new THREE.WebGLRenderer()
-// renderer.shadowMap.enabled = true;
-// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-// renderer.toneMapping = THREE.LinearToneMapping;
-
-// const controls = new OrbitControls(camera, renderer.domElement)
-// const objLoader = new OBJLoader();
-// const mtlLoader = new MTLLoader();
-
-// let angle1= 0;
-// let bulbLight = null;
-// let hemispherelight = null;
-
-// let dom_light = {
-//   dom_intensity: 0.38,
-// };
-
-// let bubl_light = {
-//   emissiveIntensity: 1.2,
-//   decay: 1,
-// };
-
-
-
-// const init = function () {
-//   const theta = (SUNu + 0.5)*Math.PI*2;
-//   const phi = SUNv*Math.PI;
-
-//   const sun_z = Math.cos(phi);
-//   const sun_x = Math.sin(theta) * Math.sin(phi) * -1;
-//   const sun_y = Math.cos(theta) * Math.sin(phi) * -1;
-
-//   console.log(sun_x,sun_z,sun_y)
-
-//   scene.background = new THREE.Color(0xdddddd);
-//   camera.position.set(10, 20, -10); // Set position like this
-//   camera.lookAt(new THREE.Vector3(0,0,0)); // Set look at coordinate like this
-
-//   var axesHelper = new THREE.AxesHelper( 1200 );
-//   scene.add( axesHelper );
-
-//   hemispherelight = new THREE.HemisphereLight(0xdee2e8, 0x353021, 0.38);
-//   scene.add(hemispherelight);
-
-//   bulbLight = new THREE.SpotLight( 0xc0bfad, 1 , 1000, 10);
-//    bulbLight.position.set( 0, 20, 0 );
-//    bulbLight.decay = 1;
-//    bulbLight.castShadow = true;
-//    bulbLight.shadow.camera.far = 200;
-//    scene.add( bulbLight );
-
-//   let mtl_list = new Array()
-
-//   mtlLoader.load('/resource/testcar_0319.mtl', function (materials) {
-//     materials.preload()
-//     for(let mn in materials.materials){
-//       //console.log(materials.materials[mn])
-//       mtl_list.push(materials.materials[mn])
-//     }
-//   })
-
-
-//   let trimchange = new dat.GUI();
-//   let trim_amount = trimchange.addFolder('trim_amount');
-//   const trims = Object.keys(test_trim)
-
-//   let cn = {
-//     add:function(trim){
-
-//       for( let i = scene.children.length - 1; i >= 0; i--) {
-//         if(scene.children[i].type == 'Mesh'){
-//           scene.remove(scene.children[i])
-//         }
-//       }
-
-
-//       objLoader.load('/resource/testcar_0319.obj', function (car) {
-//         let trim_objects = new Array()
-//         car.traverse(function(child) {
-
-//           if (child instanceof THREE.Mesh) {
-//               child.receiveShadow = true
-//               child.castShadow = true
-//             }
-
-//           let obj_name = child.name.split("_")
-//           obj_name.splice(-1,1)
-//           obj_name = obj_name.join("_")
-
-//           for(let i=0; i<trim.length; i++){
-//              if(obj_name == trim[i]){
-//                trim_objects.push(child)
-//              }
-//            }
-//         });
-
-//         for(let i=trim_objects.length-1; i>=0; i--){
-//           scene.add(trim_objects[i])
-//         }
-//       })
-
-//     }
-//   };
-//   for(let i=0; i<trims.length; i++){
-//     trim_amount.add({add : cn.add.bind(this, Object.keys(test_trim[trims[i]]))}, "add").name(trims[i])
-//   }
-
-
-//   let colorchange = new dat.GUI()
-//   let color_amount = colorchange.addFolder('color_amount')
-//   const extint = Object.keys(color_table["test_car"])
-
-//   let ccn = {
-//     add:function(color){
-//       //color is material name, in mtl_list
-//       let color_obj_set = []
-
-//       for(let i=0; i<color.length; i++){
-//         for(let j=0; j<mtl_list.length; j++){
-//           if(color[i]==mtl_list[j].name){
-//             //console.log(mtl_list[j])
-//             //console.log(mtl_list[j].name.split('_')[0])
-//             //console.log(test_car[mtl_list[j].name.split('_')[0]])
-//             color_obj_set.push({key:mtl_list[j], value:test_car[mtl_list[j].name.split('_')[0]]})
-//           }
-//         }
-//       }
-//       console.log(color_obj_set)
-//       // for( let i = scene.children.length - 1; i >= 0; i--) {
-//       //   if(scene.children[i].type == 'Mesh'){
-//       //     scene.remove(scene.children[i])
-//       //   }
-//       // }
-//       for(let i=0; i<color_obj_set.length; i++){
-//         //console.log(color_obj_set[i].key)
-//         for(let j=0; j<color_obj_set[i].value.length; j++){
-//           //console.log(color_obj_set[i].value[j])
-//           for(let k=scene.children.length-1; k>=0; k--){
-//             if(scene.children[k].name == color_obj_set[i].value[j]){
-//               scene.children[k].material = color_obj_set[i].key
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-//   for(let i=0; i<extint.length; i++){
-//     let colors = Object.keys(color_table["test_car"][extint[i]])
-
-//     for(let j=0; j<colors.length; j++){
-//       color_amount.add({add : ccn.add.bind(this, color_table["test_car"][extint[i]][colors[j]])}, "add").name(colors[j])
-//     }
-//   }
-
-//   renderer.setSize(window.innerWidth, window.innerHeight);
-//   document.body.appendChild(renderer.domElement);
-// }
-
-
-// const mainLoop = function () {
-
-//   angle1-=0.005;
-//   bulbLight.position.x = 10*Math.sin(angle1);
-//   bulbLight.position.z = 10*Math.cos(angle1);
-
-
-//   window.addEventListener( 'resize', onWindowResize, false );
-//   renderer.render(scene, camera);
-//   requestAnimationFrame(mainLoop);
-// }
-
-
-// function onWindowResize() {
-
-//     var width = window.innerWidth;
-//     var height = window.innerHeight;
-
-//     camera.aspect = width / height;
-//     camera.updateProjectionMatrix();
-
-//     renderer.setSize( width, height );
-
-// }
-
-
-
-// init()
-// mainLoop()
-
-
 import * as THREE from 'three';
 
 import * as dat from 'dat.gui';
@@ -217,6 +9,11 @@ import *  as RGBELoader from 'three/examples/js/loaders/RGBELoader.js'
 import * as HDRCubeTextureLoader from 'three/examples/js/loaders/HDRCubeTextureLoader.js'
 import EquirectangularToCubeGenerator from 'three/examples/js/loaders/EquirectangularToCubeGenerator.js'
 
+
+const fs = require('fs')
+const data = fs.readFileSync(__dirname + '/asdf.txt', 'utf8')
+
+console.log(data.toString())
 
 const SUNu = 0.148000
 const SUNv = 0.260000
@@ -343,15 +140,14 @@ const addTire = function () {
 }
 
 const loadHDR = () => {
-        //new THREE.RGBELoader().load('./resource/textures/HDR/Etnies_Park_Center_3k.hdr', (texture, textureData)=> {
         new THREE.RGBELoader().load('./resource/background/BasketballCourt_3k.hdr', (texture, textureData)=> {
+        //new THREE.RGBELoader().load('./resource/Basketball_Court/BasketballCourt_3k.hdr', (texture, textureData)=> {
         texture.encoding = THREE.RGBEEncoding;
         texture.minFilter = THREE.NearestFilter;
         texture.magFilter = THREE.NearestFilter;
         texture.flipY = true;
 
         const cubemap = new THREE.EquirectangularToCubeGenerator(texture, { resolution: 3200, type: THREE.UnsignedByteType });
-        //const cubemap = new THREE.EquirectangularToCubeGenerator(texture, { resolution: 800, type: THREE.UnsignedByteType });
         exrBackground = cubemap.renderTarget;
         cubeMapTexture = cubemap.update(renderer);
         texture.dispose();
@@ -360,27 +156,36 @@ const loadHDR = () => {
 
 const loadOBJ = () => {
     mtlLoader.load('/resource/spo.mtl', function (materials) {
-
+        //materials.preload()
         let room = null;
         objLoader.setMaterials(materials)
+
         objLoader.load('/resource/spo.obj', function (room) {
+
+            for(let i=0; i<room.children.length; i++){
+              let mesh = room.children[i];
+              mesh.geometry = new THREE.Geometry().fromBufferGeometry( mesh.geometry );
+              mesh.geometry.computeFaceNormals()
+              mesh.geometry.mergeVertices();
+              mesh.geometry.computeVertexNormals();
+              // mesh.geometry = new THREE.BufferGeometry().fromGeometry( mesh.geometry );
+              mesh.material.shading = THREE.SmoothShading
+            }
 
             room.traverse(function(child) {
                 if (child instanceof THREE.Mesh) {
-                    child.receiveShadow = true
-                    child.castShadow = true
+                  child.receiveShadow = true
+                  child.castShadow = true
                 }
 
                 if (child.name === 'Object001') {
-
-                    child.material.envMap = cubeMapTexture;
-                    child.material.envMapIntensity = 1
-                    child.material.reflectivity= 0.38
-                    child.material.shininess = 30;
-                    child.material.needsUpdate = true;
+                  child.material.envMap = cubeMapTexture
+                  child.material.envMapIntensity = 1
+                  child.material.reflectivity= 0.38
+                  child.material.shininess = 30;
+                  child.material.needsUpdate = true
                 }
             })
-
             scene.add(room);
         })
     })
@@ -400,7 +205,7 @@ const addFloor = () => {
 const setLights = () => {
 
     hemispherelight = new THREE.HemisphereLight(0xdee2e8, 0x353021, 0.38)
-    // scene.add(hemispherelight)
+    scene.add(hemispherelight)
 
     spotLight = new THREE.SpotLight( 0xc0bfad, 1 , 1000, 10)
     spotLight.position.set( 0, 400, 0 )
@@ -417,6 +222,7 @@ const setLights = () => {
     const sun_y = Math.cos(theta) * Math.sin(phi) * -1;
 
     let directionalLight = new THREE.DirectionalLight( 0xfdfffa, 0.8 );
+    //let directionalLight = new THREE.SpotLight( 0xfdfffa, 0.8 );
     directionalLight.castShadow = true
     const d = 1200;
       directionalLight.shadow.camera.left = - d;
@@ -424,7 +230,8 @@ const setLights = () => {
       directionalLight.shadow.camera.top = d;
       directionalLight.shadow.camera.bottom = - d;
     directionalLight.shadow.camera.far = 3000
-    directionalLight.position.set = new THREE.Vector3(sun_x,sun_y,sun_z)
+    directionalLight.position.set(-sun_x,sun_y,-sun_z)
+    //directionalLight.position.set = new THREE.Vector3(sun_x,sun_y,sun_z)
     scene.add( directionalLight );
 
     //scene.add(new THREE.AmbientLight( 0x666666 ))
@@ -630,5 +437,3 @@ function onWindowResize() {
 
 init()
 loop()
-
-
